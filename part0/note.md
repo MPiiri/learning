@@ -1,3 +1,4 @@
+```mermaid
 sequenceDiagram
     participant browser
     participant server
@@ -11,5 +12,5 @@ sequenceDiagram
     browser->>server: GET js
 
     browser->>server: GET data
-
+```
 
