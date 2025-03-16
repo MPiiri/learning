@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes</title>
+</head>
+
+<body>
+    <div id="content">
+
+    </div>
+    <form id="note_form">
+        <input type="text" name="note" />
+        <button type="submit" value="save">Insert</button>
+    </form>
+    <script>
+        const form = document.getElementById("note_form");
+        const message = document.getElementById("content");
+        const messages = [];
+        form.onsubmit = function (event) {
+            event.preventDefault();
+            messages.push(document.getElementsByName("note")[0].value);
+            message.innerText = messages.join("\n");
+            document.getElementsByName("note")[0].value = "";
+        }
+    </script>
+</body>
+
+</html>
