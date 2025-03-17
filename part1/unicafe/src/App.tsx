@@ -1,5 +1,24 @@
 import { useState, useEffect } from 'react';
-const Options = () => {
+const Statistics = ({ good, neutral, bad, all, average, positive }: { good: number, neutral: number, bad: number, all: number, average: number, positive: number }) => {
+  
+  return (
+    <div>
+      <b>statistics</b>
+      {all === 0 ? <p>No feedback given</p> :
+        <div>
+          <p>good: {good}</p>
+          <p>neutral {neutral}</p>
+          <p>bad  {bad}</p>
+          <p>all  {all};</p>
+          <p>average  {average}</p>
+          <p>positive  {positive} %</p>
+        </div>
+      }
+    </div>
+  );
+}
+
+function App() {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
@@ -13,30 +32,13 @@ const Options = () => {
       setPositive(good / all * 100);
     }
   }, [good, neutral, bad, average, positive, all]);
-
-  console.log("all", all);
-
   return (
-    <div>
+    <div className="App">
+      <b>give feedback</b> <br />
       <button onClick={() => setGood(good + 1)} value={good}>good</button>
       <button onClick={() => setNeutral(neutral + 1)} value={neutral}>neutral</button>
       <button onClick={() => setBad(bad + 1)} value={bad}>bad</button>
-      <div>
-        <p>good: {good}</p>
-        <p>neutral {neutral}</p>
-        <p>bad  {bad}</p>
-        <p>all  {all};</p>
-        <p>average  {average}</p>
-        <p>positive  {positive} %</p>
-      </div>
-    </div>
-  );
-}
-
-function App() {
-  return (
-    <div className="App">
-      <Options></Options>
+      <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} positive={positive}></Statistics>
     </div>
   );
 }
