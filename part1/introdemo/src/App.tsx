@@ -1,12 +1,13 @@
 const Header = ({ course }: { course: string }) => {
   return (<h1>{course}</h1>)
 }
-const Content = ({ parts }: { parts: { name: string, exercises: number }[] }) => {
-  const Part =({exercises, part}: {exercises: number, part: string}) => (
+const Part =({exercises, part}: {exercises: number, part: string}) => (
     <p>
       {part} {exercises}
     </p>
   )
+const Content = ({ parts }: { parts: { name: string, exercises: number }[] }) => {
+  
   return (
     <>
       <Part part={parts[0].name} exercises={parts[0].exercises} />
