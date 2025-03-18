@@ -46,11 +46,11 @@ const Course = () => {
     return (
         <div>
             {courses.map(course =>
-                <>
-                    <Header key={course.id} course={course.name} />
-                    <Content key={course.id} parts={course.parts} />
-                    <Total key={course.id} parts={course.parts} />
-                </>
+                <div key={course.id}>
+                    <Header course={course.name} />
+                    <Content parts={course.parts} courseId={course.id} />
+                    <Total parts={course.parts} />
+                </div>
             )}
         </div>
     )
@@ -63,11 +63,12 @@ const Part = ({ exercises, part }: { exercises: number, part: string }) => (
         {part} {exercises}
     </p>
 )
-const Content = ({ parts }: { parts: { id: number, name: string, exercises: number }[] }) => {
+const Content = ({ parts, courseId }: { parts : { id: number, name: string, exercises: number }[] , courseId: number}) => {
+console.log(parts.map(part =>"key" + courseId + part.id));
 
     return (
         <>
-            {parts.map(part => <Part key={part.id} part={part.name} exercises={part.exercises} />)}
+            {parts.map(part => <Part key={`${courseId}-${part.id}`} part={part.name} exercises={part.exercises} />)}
         </>
     )
 
