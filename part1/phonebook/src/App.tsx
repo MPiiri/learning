@@ -24,6 +24,19 @@ const Filter = ({ setFilter }: { setFilter: any }) => {
 }
 const Form = ({ newName, setNewName, newNumber, setNewNumber, persons, setPersons, setIds, ids }:
   { newName: string, setNewName: any, newNumber: number, setNewNumber: any, persons: { name: string, number: number, id: number }[], setPersons: any, setIds: any, ids: any }) => {
+
+  const [message, setMessage] = useState("")
+  const Notification = ({ message }: { message: string }) => {
+    if (message === null) {
+      return null
+    }
+
+    return (
+      <div>
+        {message}
+      </div>
+    )
+  }
   const handleNameChange = (event: any) => {
     event.preventDefault()
     console.log(event.target.value)
@@ -40,20 +53,34 @@ const Form = ({ newName, setNewName, newNumber, setNewNumber, persons, setPerson
       setIds(persons.length + 1)
       setPersons(persons.concat({ name: newName, number: newNumber, id: ids.toString() }))
       postPerson('http://localhost:3001/persons', { name: newName, number: newNumber, id: ids.toString() })
+      setMessage(`Added ${newName}`)
+      setTimeout(() => {
+        setMessage("")
+      }, 5000)
 
     } else {
       event.preventDefault()
       window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`) &&
-        updatePerson(persons.find(person => person.name === newName)?.id, { name: newName, number: newNumber, id: persons.find(person => person.name === newName)?.id }).then(() => window.location.reload())
+        updatePerson(persons.find(person => person.name === newName)?.id, { name: newName, number: newNumber, id: persons.find(person => person.name === newName)?.id })
+        .then(() => {
+          setMessage(`Updated ${newName}`)
+        }).then(() => setTimeout(() => {window.location.reload()}, 5000))
     }
   }
-
+  const footerStyle = {
+    color: 'green',
+    fontStyle: 'italic',
+    fontSize: 30,
+    background: 'lightgrey'
+  }
   return (
     <form onSubmit={addName}>
       <div>
         <div>debug: {newName} {newNumber}</div>
         name: <input value={newName} onChange={handleNameChange} />
         number: <input type="number" value={newNumber} onChange={(handleNumberChange)} />
+        < div style={footerStyle}>
+          <Notification message={message} /></div>
       </div>
       <div>
         <button type="submit">add</button>

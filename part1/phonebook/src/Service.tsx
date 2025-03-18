@@ -8,6 +8,7 @@ export const postPerson = (url: string, data: { name: string, number: number, id
 
 export const delPerson = (id: any) => axios
     .delete(`http://localhost:3001/persons/${id}`)
+    .catch(error => console.log(error))
 
 export const updatePerson = (id: any, data: any) => axios
     .put(`http://localhost:3001/persons/${id}`, data)
