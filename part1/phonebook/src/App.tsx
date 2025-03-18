@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import axios from 'axios';
+import { useEffect, useState } from 'react'
 
-const Persons = ({ persons, filter }: { persons: { name: string, number: number }[], filter: string }) => {
+const Persons = ({ persons, filter }: { persons: { name: string, number: number, id: number }[], filter: string }) => {
   return (
     <>
       {persons
@@ -15,7 +16,7 @@ const Filter = ({ setFilter }: { setFilter: any }) => {
     <div>Filter: <input onChange={(event) => setFilter(event.target.value)} /></div>
   )
 }
-const Form = ({ newName, setNewName, newNumber, setNewNumber, persons, setPersons }: { newName: string, setNewName: any, newNumber: number, setNewNumber: any, persons: { name: string, number: number }[], setPersons: any}) => {
+const Form = ({ newName, setNewName, newNumber, setNewNumber, persons, setPersons }: { newName: string, setNewName: any, newNumber: number, setNewNumber: any, persons: { name: string, number: number, id: number }[], setPersons: any}) => {
   const handleNameChange = (event: any) => {
     event.preventDefault()
     console.log(event.target.value)
@@ -24,12 +25,12 @@ const Form = ({ newName, setNewName, newNumber, setNewNumber, persons, setPerson
   const handleNumberChange = (event: any) => {
     event.preventDefault()
     console.log(event.target.value)
-    setNewNumber(Number(event.target.value))
+    setNewNumber(event.target.value)
   }
   const addName = (event: any) => {
     if (!persons.map(person => person.name).includes(newName)) {
       event.preventDefault()
-      setPersons(persons.concat({ name: newName, number: newNumber }))
+      setPersons(persons.concat({ name: newName, number: newNumber, id: persons.length + 1 }))
     } else {
       event.preventDefault()
       alert(`${newName} is already added to phonebook`)
@@ -49,14 +50,22 @@ const Form = ({ newName, setNewName, newNumber, setNewNumber, persons, setPerson
     </form>)
 }
 const App = () => {
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }, [])
+  
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState(0)
   const [filter, setFilter] = useState('')
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: 555 }
-  ])
+  const [persons, setPersons] = useState([])
 
-  return (
+return (
     <div>
       <h2>Phonebook</h2>
       <Filter setFilter={setFilter}></Filter>
