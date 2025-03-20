@@ -1,36 +1,43 @@
-const express = require('express')
+import express from 'express'
 const app = express()
 const port = 3001
-app.use(express.json());
-let persons =
-    [
-        {
-            "id": "1",
-            "name": "Arto Hellas",
-            "number": "040-123456"
-        },
-        {
-            "id": "2",
-            "name": "Ada Lovelace",
-            "number": "39-44-5323523"
-        },
-        {
-            "id": "3",
-            "name": "Dan Abramov",
-            "number": "12-43-234345"
-        },
-        {
-            "id": "4",
-            "name": "Mary Poppendieck",
-            "number": "39-23-6423122"
-        },
-        {
-            "id": "5",
-            "name": "Ada Lovelace",
-            "number": "39-44-5323523"
-        }
-    ]
+import morgan from 'morgan'
 
+let persons = [
+    {
+        "id": "1",
+        "name": "Arto Hellas",
+        "number": "040-123456"
+    },
+    {
+        "id": "2",
+        "name": "Ada Lovelace",
+        "number": "39-44-5323523"
+    },
+    {
+        "id": "3",
+        "name": "Dan Abramov",
+        "number": "12-43-234345"
+    },
+    {
+        "id": "4",
+        "name": "Mary Poppendieck",
+        "number": "39-23-6423122"
+    },
+    {
+        "id": "5",
+        "name": "Ada Lovelace",
+        "number": "39-44-5323523"
+    }
+]
+
+morgan.token('post-data', (req) => {
+    return req.method === 'POST' ? JSON.stringify(req.body) : '';
+});
+
+app.use(morgan(':method :url :status :response-time :post-data'));
+
+app.use(express.json());
 const generateId = () => {
     const maxId = persons.length > 0
         ? Math.floor(Math.random() * 4000)
@@ -49,7 +56,6 @@ app.get(`/info`, (request, response) => {
 app.get(`/api/persons/:id`, (request, response) => {
     const id = request.params.id
     const person = persons.find(person => person.id === id)
-    console.log(person);
 
     if (person) {
         response.json(person)
@@ -64,7 +70,6 @@ app.delete(`/api/persons/:id`, (request, response) => {
 })
 app.post('/api/persons', (request, response) => {
     const body = request.body
-
     if (!body.name || !body.number) {
         return response.status(400).json({ error: 'name or number missing' });
     }
@@ -72,7 +77,7 @@ app.post('/api/persons', (request, response) => {
         return response.status(400).json({ error: 'name must be unique' });
     }
 
-    const person = {
+    let person = {
         name: body.name,
         number: body.number,
         id: generateId(),
