@@ -52,7 +52,7 @@ const Form = ({ newName, setNewName, newNumber, setNewNumber, persons, setPerson
       event.preventDefault()
       setIds(persons.length + 1)
       setPersons(persons.concat({ name: newName, number: newNumber, id: ids.toString() }))
-      postPerson('http://localhost:3001/persons', { name: newName, number: newNumber, id: ids.toString() })
+      postPerson('http://localhost:3001/api/persons', { name: newName, number: newNumber, id: ids.toString() })
       setMessage(`Added ${newName}`)
       setTimeout(() => {
         setMessage("")

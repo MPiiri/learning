@@ -2,7 +2,10 @@ import express from 'express'
 const app = express()
 const port = 3001
 import morgan from 'morgan'
+import cors from 'cors';
+app.use(express.static('public'));
 
+app.use(cors())
 let persons = [
     {
         "id": "1",
@@ -23,11 +26,6 @@ let persons = [
         "id": "4",
         "name": "Mary Poppendieck",
         "number": "39-23-6423122"
-    },
-    {
-        "id": "5",
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523"
     }
 ]
 
@@ -45,7 +43,7 @@ const generateId = () => {
     return String(maxId + 1)
 }
 app.get('/', (request, response) => {
-    response.send('<h1>Hello Database!</h1>')
+    response.sendFile(path.join(__dirname, 'public', 'index.html'));
 })
 app.get('/api/persons', (request, response) => {
     response.json(persons)
